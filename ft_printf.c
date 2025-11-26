@@ -6,76 +6,98 @@
 /*   By: tle-rhun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/22 10:53:38 by tle-rhun          #+#    #+#             */
-/*   Updated: 2025/11/24 19:16:08 by tle-rhun         ###   ########.fr       */
+/*   Updated: 2025/11/26 19:12:06 by tle-rhun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include <stdarg.h>
-# include "include/ft_printf.h"
+#include "include/ft_printf.h"
 
-void	ft_pointerinhexadécimal(void *pointeur)
+int	ft_putnbr(int n)
 {
-	char	*base;
-	char *str;
-	int	i;
-	int	indice;
-	
-	base = "0123456789abcdef";
-	str = (char *) pointeur;
-	i = 0;
-	while (str[i])
+	long	nb;
+	int		len;
+	char	mod;
+
+	len = 0;
+	nb = n;
+	if (nb == -2147483648)
 	{
-		indice = 0;
-		while (str[i] != base[indice])
-			indice++;
-		ft_putchar_fd(base[indice], 1);
+		write(1, "-2147483648", 11);
+		return (11);
+	}
+	if (nb < 0)
+	{
+		nb = nb * -1;
+		write(1, "-", 1);
+		len++;
+	}
+	if (nb > 9)
+		len += ft_putnbr(nb / 10);
+	mod = (nb % 10) + '0';
+	write(1, &mod, 1);
+	len++;
+	return (len);
+}
+
+int	ft_putstr(char *s)
+{
+	int	i;
+
+	i = 0;
+	if (s == NULL)
+		return (write(1, "(null)", 6));
+	while (s[i] != '\0')
+	{
+		write(1, &s[i], 1);
 		i++;
 	}
+	return (i);
 }
 
-
-
-void	ft_arg(char *s, int i, va_list ap)
+int	ft_arg(char *s, int i, va_list ap)
 {
+	char			in_write;
+	void			*ptr;
+
 	if (s[i + 1] == 'c')
-		ft_putchar_fd(((char) va_arg(ap, int)), 1);
-	if (s[i + 1] == 's')
-		ft_putstr_fd(((char *) va_arg(ap, char *)), 1);
-	if (s[i + 1] == 'p')
-		ft_pointerinhexadécimal((void *) va_arg(ap, void *));
-	// if (s[i + 1] == 'd')
-
-	if (s[i + 1] == 'i')
-		ft_putnbr_fd(((int) va_arg(ap, int)), 1);
-	// if (s[i + 1] == 'u')
-
-	// if (s[i + 1] == 'x')
-
-	// if (s[i + 1] == 'X')
-
+	{
+		in_write = (char) va_arg(ap, int);
+		return (write(1, &in_write, 1), 1);
+	}
+	else if (s[i + 1] == 's')
+		return (ft_putstr(((char *) va_arg(ap, char *))));
+	else if (s[i + 1] == 'p')
+	{
+		ptr = va_arg(ap, void *);
+		if (ptr == NULL)
+			return (write(1, "(nil)", 5));
+		return (ft_putadressmemory(ptr));
+	}
+	else if (s[i + 1] == 'd' || s[i + 1] == 'i')
+		return (ft_putnbr(((int) va_arg(ap, int))));
+	else if (s[i + 1] == 'u')
+		return (ft_unsignedputnbr_fd((int) va_arg(ap, int)));
+	else if (s[i + 1] == 'x')
+		return (ft_putbase((unsigned int) va_arg(ap, int), "0123456789abcdef"));
+	else
+		return (ft_putbase((unsigned int) va_arg(ap, int), "0123456789ABCDEF"));
 }
+
 int	ft_condition(char *s, int i)
 {
 	if (s[i] == '%'
-		|| s[i] == 'c'
-		|| s[i] == 's'
-		|| s[i] == 'p'
-		|| s[i] == 'd'
-		|| s[i] == 'i'
-		|| s[i] == 'u'
-		|| s[i] == 'x'
-		|| s[i] == 'X'
+		|| s[i] == 'c' || s[i] == 's'
+		|| s[i] == 'p' || s[i] == 'd'
+		|| s[i] == 'i' || s[i] == 'u'
+		|| s[i] == 'x' || s[i] == 'X'
 	)
 	{
-		if (s[i + 1] == 'c' 
-			|| s[i + 1] == 's' 
-			|| s[i + 1] == 'p' 
-			|| s[i + 1] == 'd' 
-			|| s[i + 1] == 'i'
-			|| s[i + 1] == 'u'
-			|| s[i + 1] == 'x'
+		if (s[i + 1] == 'c'
+			|| s[i + 1] == 's' || s[i + 1] == 'p'
+			|| s[i + 1] == 'd' || s[i + 1] == 'i'
+			|| s[i + 1] == 'u' || s[i + 1] == 'x'
 			|| s[i + 1] == 'X'
-			|| s[i - 1] == '%')
+		)
 			return (0);
 		return (1);
 	}
@@ -85,41 +107,40 @@ int	ft_condition(char *s, int i)
 
 int	ft_printf(const char *str, ...)
 {
-	int	i;
-	int	nbarg;
+	int		i;
+	int		len;
+	va_list	ap;
 	char	*s;
-	
-	va_list ap;
+
 	va_start(ap, str);
-	i = 0;
-	nbarg = 0;
 	s = (char *) str;
-	while (s[i])
+	i = 0;
+	len = 0;
+	while (str[i])
 	{
-		if (s[i]== '%' && s[i+1]!= '%')
+		if (s[i] == '%' && s[i + 1] == '%')
+			i++;
+		if (!ft_condition(s, i))
 		{
-			ft_arg(s, i, ap);
-			nbarg ++;
+			len += ft_arg((char *)str, i, ap);
+			i++;
 		}
-		if (ft_condition(s, i))
-			ft_putchar_fd(s[i],1);
+		else
+			len += write(1, &str[i], 1);
 		i++;
 	}
 	va_end(ap);
-	return (1);
+	return (len);
 }
-// if (s[i] == '\0' && nbarg == 0)
-	// ft_putstr_fd(s, 1);
-
-#include <stdio.h>
+/* #include <stdio.h>
 int main (void)
 {
-	const char * str ="\nsalut %c %s %p %%";
-	char *s ="tout le monde";
-	char b ='b';
-	int	nb = 64;
-	int *ptr = &nb;
-	ft_printf(str , b, s, ptr);
-	printf(str , b, s, ptr);
+	// const char * str ="%%testa%c";
+	char *nb ="tout le monde";
+	// char nb ='b';
+	// int	nb = -888888888390;
+	// int *ptr = &nb;
+	printf("taille fonction originale:%d\n", ft_printf(" %%c ", nb));
+	printf("taille fonction originale:%d\n", printf(" %%c ", nb));
 	return (1);
-}
+} */

@@ -5,19 +5,24 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: tle-rhun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/22 19:01:25 by tle-rhun          #+#    #+#             */
-/*   Updated: 2025/11/24 15:08:29 by tle-rhun         ###   ########.fr       */
+/*   Created: 2025/11/25 16:41:15 by tle-rhun          #+#    #+#             */
+/*   Updated: 2025/11/26 18:56:50 by tle-rhun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# ifndef PRINTF_H
-# define PRINTF_H
+#ifndef FT_PRINTF_H
+# define FT_PRINTF_H
 
 # include <stdarg.h>
 # include <unistd.h>
-# include "../libft/libft.h"
 
+int		ft_printf(const char *str, ...);
+int		ft_putstr(char *s);
+int		ft_condition(char *s, int i);
+int		ft_arg(char *s, int i, va_list ap);
+int		ft_putadressmemory(void *pointeur);
+int		ft_putbase(unsigned long nbr, char *base);
+int		ft_unsignedputnbr_fd(int n);
+int		ft_putnbr(int n);
 
-
-
-#endif /* PRINTF_H */
+#endif /* FT_PRINTF_H */
