@@ -6,11 +6,11 @@
 /*   By: tle-rhun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/22 10:53:38 by tle-rhun          #+#    #+#             */
-/*   Updated: 2025/11/26 19:12:06 by tle-rhun         ###   ########.fr       */
+/*   Updated: 2025/11/27 18:34:32 by tle-rhun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "include/ft_printf.h"
+#include "ft_printf.h"
 
 int	ft_putnbr(int n)
 {
@@ -85,12 +85,7 @@ int	ft_arg(char *s, int i, va_list ap)
 
 int	ft_condition(char *s, int i)
 {
-	if (s[i] == '%'
-		|| s[i] == 'c' || s[i] == 's'
-		|| s[i] == 'p' || s[i] == 'd'
-		|| s[i] == 'i' || s[i] == 'u'
-		|| s[i] == 'x' || s[i] == 'X'
-	)
+	if (s[i] == '%')
 	{
 		if (s[i + 1] == 'c'
 			|| s[i + 1] == 's' || s[i + 1] == 'p'
@@ -116,15 +111,16 @@ int	ft_printf(const char *str, ...)
 	s = (char *) str;
 	i = 0;
 	len = 0;
+	if (!str)
+		return (-1);
 	while (str[i])
 	{
 		if (s[i] == '%' && s[i + 1] == '%')
 			i++;
 		if (!ft_condition(s, i))
-		{
 			len += ft_arg((char *)str, i, ap);
+		if (!ft_condition(s, i))
 			i++;
-		}
 		else
 			len += write(1, &str[i], 1);
 		i++;
@@ -132,15 +128,22 @@ int	ft_printf(const char *str, ...)
 	va_end(ap);
 	return (len);
 }
-/* #include <stdio.h>
+
+#include <stdio.h>
 int main (void)
 {
-	// const char * str ="%%testa%c";
-	char *nb ="tout le monde";
-	// char nb ='b';
-	// int	nb = -888888888390;
-	// int *ptr = &nb;
-	printf("taille fonction originale:%d\n", ft_printf(" %%c ", nb));
-	printf("taille fonction originale:%d\n", printf(" %%c ", nb));
-	return (1);
-} */
+	const char * str ="oui";
+	// char *nb ="tout le monde";
+	// // char nb ='b';
+	// // int	nb = -888888888390;
+	// // int *ptr = &nb;
+
+	// régler avec unsigned long long à la place de unsigned int pour mon 'p'
+	printf("taille fonction originale:%d\n", ft_printf(" ss ", str));
+	printf("taille fonction originale:%d\n", printf(" ss", str));
+	//régler l'erreur  avec plusieurs %%%% d'affiles qui se trouve juste en dessous:
+	printf("taille fonction originale:%d\n", ft_printf(" %%%%%%s %%%s ", str));
+	printf("taille fonction originale:%d\n", printf(" %%%%%%s %%%s", str));
+	// return (1);
+// 
+}
