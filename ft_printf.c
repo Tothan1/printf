@@ -6,7 +6,7 @@
 /*   By: tle-rhun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/22 10:53:38 by tle-rhun          #+#    #+#             */
-/*   Updated: 2025/11/28 11:57:04 by tle-rhun         ###   ########.fr       */
+/*   Updated: 2025/11/28 12:13:52 by tle-rhun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,7 +125,7 @@ int	ft_printf(const char *str, ...)
 	return (len);
 }
 
-#include <stdio.h>
+/* #include <stdio.h>
 int main (void)
 {
 	const char * str ="oui";
@@ -134,13 +134,13 @@ int main (void)
 	// // int	nb = -888888888390;
 	// // int *ptr = &nb;
 
-	// régler avec unsigned long long à la place de unsigned int pour mon 'p'
-	// printf("taille fonction originale:%d\n", ft_printf(" ss ", str));
-	// printf("taille fonction originale:%d\n", printf(" ss", str));
+	// printf("taille fonction originale:%d\n", ft_printf(" dd ", str));
+	// printf("taille fonction originale:%d\n", printf(" dd", str));
 	printf("taille fonction originale:%d\n", printf(" %%%%%%s %%%s ", str));
 	printf("taille fonction Tynaël:%d\n", ft_printf(" %%%%%%s %%%s ", str));
 	printf("taille fonction originale:%d\n", printf(" %%%%%% %% "));
 	printf("taille fonction Tynaël:%d\n", ft_printf(" %%%%%% %% "));
+	ft_printf(0);
 	// return (1);
 // 
-}
+} */
