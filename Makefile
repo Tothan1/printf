@@ -33,4 +33,4 @@ re: fclean  all
 # bonus: ${NAME} ${OBJ_BONUS}
 # 	ar rcs ${NAME} ${OBJ_BONUS}
 
-.PHONY: all clean fclean re -c
+.PHONY: all clean fclean re
