@@ -1,6 +1,5 @@
 #### VARIABLES ####
 NAME = libftprintf.a
-BONUS = bonus
 # HEADER_PATH = include
 CC= cc
 CFLAGS=-Wall -Wextra -Werror
@@ -29,8 +28,5 @@ fclean: clean
 	rm -f ${NAME}
 
 re: fclean  all
-
-# bonus: ${NAME} ${OBJ_BONUS}
-# 	ar rcs ${NAME} ${OBJ_BONUS}
 
 .PHONY: all clean fclean re
