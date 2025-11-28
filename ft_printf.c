@@ -6,7 +6,7 @@
 /*   By: tle-rhun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/22 10:53:38 by tle-rhun          #+#    #+#             */
-/*   Updated: 2025/11/27 18:34:32 by tle-rhun         ###   ########.fr       */
+/*   Updated: 2025/11/28 11:57:04 by tle-rhun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,14 +56,10 @@ int	ft_putstr(char *s)
 
 int	ft_arg(char *s, int i, va_list ap)
 {
-	char			in_write;
 	void			*ptr;
 
 	if (s[i + 1] == 'c')
-	{
-		in_write = (char) va_arg(ap, int);
-		return (write(1, &in_write, 1), 1);
-	}
+		return (ft_putchar((char) va_arg(ap, int)));
 	else if (s[i + 1] == 's')
 		return (ft_putstr(((char *) va_arg(ap, char *))));
 	else if (s[i + 1] == 'p')
@@ -79,8 +75,10 @@ int	ft_arg(char *s, int i, va_list ap)
 		return (ft_unsignedputnbr_fd((int) va_arg(ap, int)));
 	else if (s[i + 1] == 'x')
 		return (ft_putbase((unsigned int) va_arg(ap, int), "0123456789abcdef"));
-	else
+	else if (s[i + 1] == 'X')
 		return (ft_putbase((unsigned int) va_arg(ap, int), "0123456789ABCDEF"));
+	else
+		return (ft_putchar('%'));
 }
 
 int	ft_condition(char *s, int i)
@@ -91,7 +89,7 @@ int	ft_condition(char *s, int i)
 			|| s[i + 1] == 's' || s[i + 1] == 'p'
 			|| s[i + 1] == 'd' || s[i + 1] == 'i'
 			|| s[i + 1] == 'u' || s[i + 1] == 'x'
-			|| s[i + 1] == 'X'
+			|| s[i + 1] == 'X' || s[i + 1] == '%'
 		)
 			return (0);
 		return (1);
@@ -115,8 +113,6 @@ int	ft_printf(const char *str, ...)
 		return (-1);
 	while (str[i])
 	{
-		if (s[i] == '%' && s[i + 1] == '%')
-			i++;
 		if (!ft_condition(s, i))
 			len += ft_arg((char *)str, i, ap);
 		if (!ft_condition(s, i))
@@ -139,11 +135,12 @@ int main (void)
 	// // int *ptr = &nb;
 
 	// régler avec unsigned long long à la place de unsigned int pour mon 'p'
-	printf("taille fonction originale:%d\n", ft_printf(" ss ", str));
-	printf("taille fonction originale:%d\n", printf(" ss", str));
-	//régler l'erreur  avec plusieurs %%%% d'affiles qui se trouve juste en dessous:
-	printf("taille fonction originale:%d\n", ft_printf(" %%%%%%s %%%s ", str));
-	printf("taille fonction originale:%d\n", printf(" %%%%%%s %%%s", str));
+	// printf("taille fonction originale:%d\n", ft_printf(" ss ", str));
+	// printf("taille fonction originale:%d\n", printf(" ss", str));
+	printf("taille fonction originale:%d\n", printf(" %%%%%%s %%%s ", str));
+	printf("taille fonction Tynaël:%d\n", ft_printf(" %%%%%%s %%%s ", str));
+	printf("taille fonction originale:%d\n", printf(" %%%%%% %% "));
+	printf("taille fonction Tynaël:%d\n", ft_printf(" %%%%%% %% "));
 	// return (1);
 // 
 }
