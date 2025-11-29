@@ -6,7 +6,7 @@
 /*   By: tle-rhun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/22 10:53:38 by tle-rhun          #+#    #+#             */
-/*   Updated: 2025/11/28 12:13:52 by tle-rhun         ###   ########.fr       */
+/*   Updated: 2025/11/29 15:33:54 by tle-rhun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,14 +125,14 @@ int	ft_printf(const char *str, ...)
 	return (len);
 }
 
-/* #include <stdio.h>
+#include <stdio.h>
 int main (void)
 {
 	const char * str ="oui";
 	// char *nb ="tout le monde";
 	// // char nb ='b';
-	// // int	nb = -888888888390;
-	// // int *ptr = &nb;
+	long long	nb = -88888888839878787;
+	long long *ptr = &nb;
 
 	// printf("taille fonction originale:%d\n", ft_printf(" dd ", str));
 	// printf("taille fonction originale:%d\n", printf(" dd", str));
@@ -140,7 +140,10 @@ int main (void)
 	printf("taille fonction Tynaël:%d\n", ft_printf(" %%%%%%s %%%s ", str));
 	printf("taille fonction originale:%d\n", printf(" %%%%%% %% "));
 	printf("taille fonction Tynaël:%d\n", ft_printf(" %%%%%% %% "));
+	printf("taille fonction originale:%d\n", printf("%p", ptr));
+	printf("taille fonction Tynaël:%d\n", ft_printf("%p", ptr));
+
 	ft_printf(0);
 	// return (1);
 // 
-} */
+}
